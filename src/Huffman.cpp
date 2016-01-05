@@ -10,7 +10,8 @@ int Huffman::length = 0;
 std::queue<Node*> Huffman::leftQueue;
 std::queue<Node*> Huffman::rightQueue;
 std::list<Node*> Huffman::tree;
-
+std::map<char, std::vector<bool> > Huffman::code_map;
+std::vector<bool> Huffman::word_code;
 /*
  * queues for implementing with two priority queues
  */
@@ -71,8 +72,8 @@ void Huffman::ini() {
 		it++;
 	}
 	tree.sort(Node::CompareNodes());
-	for (iter = tree.begin(); iter != tree.end(); ) {
-		Node* temp=*iter;
+	for (iter = tree.begin(); iter != tree.end();) {
+		Node* temp = *iter;
 		leftQueue.push(*iter);
 		++iter;
 		tree.remove(temp);
@@ -93,25 +94,24 @@ void Huffman::ini() {
 }
 
 Node* Huffman::makeNodeFromMin() {
-	Node* leftTemp;
-	Node* rightTemp;
-	Node* firstMin;
-	Node* secondMin;
-	Node* parent;
+	Node* leftTemp = NULL;
+	Node* rightTemp = NULL;
+	Node* firstMin = NULL;
+	Node* secondMin = NULL;
+	Node* parent = NULL;
 	if (rightQueue.empty() && leftQueue.empty())
 		return NULL;
-	if(rightQueue.size()==1&&leftQueue.size()==1){
-		leftTemp=leftQueue.front();
+	if (rightQueue.size() == 1 && leftQueue.size() == 1) {
+		leftTemp = leftQueue.front();
 		leftQueue.pop();
-		rightTemp=rightQueue.front();
-		if(leftTemp->getOccurences()>rightTemp->getOccurences())
-		parent=new Node(leftTemp,rightTemp);
+		rightTemp = rightQueue.front();
+		if (leftTemp->getOccurences() > rightTemp->getOccurences())
+			parent = new Node(leftTemp, rightTemp);
 		else
-			parent=new Node(rightTemp,leftTemp);
+			parent = new Node(rightTemp, leftTemp);
 		tree.push_back(parent);
 		return parent;
-	}
-	else if (rightQueue.empty()) {
+	} else if (rightQueue.empty()) {
 		firstMin = leftQueue.front();
 		leftQueue.pop();
 		secondMin = leftQueue.front();
@@ -148,15 +148,16 @@ Node* Huffman::makeNodeFromMin() {
 				rightQueue.pop();
 			}
 		} else if (leftQueue.empty()) {
-			if (rightQueue.size() == 1)
+			if (rightQueue.size() == 1) //TODO
 				return NULL;
 			else {
-				firstMin = rightQueue.front();
-				rightQueue.pop();
+				//firstMin = rightQueue.front();
+				//rightQueue.pop();
 				secondMin = rightQueue.front();
 				rightQueue.pop();
 				parent = new Node(firstMin, secondMin);
 				tree.push_back(parent);
+				rightQueue.push(parent);
 				return parent;
 			}
 		} else if (rightQueue.empty()) {
@@ -185,15 +186,43 @@ Node* Huffman::makeNodeFromMin() {
 void Huffman::printTree(Node* root, int k = 0) {
 	if (root != NULL) {
 		Huffman::printTree(root->getLeftson(), k + 3);
-		for (unsigned i = 0; i < k; ++i) {
-			std::cout < " ";
+		for (int i = 0; i < k; ++i) {
+			std::cout << " ";
 		}
 		if (root->getCharacter())
-			std::cout << root->getOccurences() << "(" << root->getCharacter() << ")"
-					<< std::endl;
+			std::cout << root->getOccurences() << "(" << root->getCharacter()
+					<< ")" << std::endl;
 		else
 			std::cout << root->getOccurences() << endl;
 		Huffman::printTree(root->getRightSon(), k + 3);
+	}
+}
+void Huffman::build(Node* root) {
+	if (root->getLeftson() != NULL) {
+		word_code.push_back(0);
+		build(root->getLeftson());
+	}
+	if (root->getRightSon() != NULL) {
+		word_code.push_back(1);
+		build(root->getRightSon());
+	}
+	if (root->getCharacter() != '\0') {
+		code_map[(char)root->getCharacter()] = word_code;
+	}
+	word_code.pop_back();
+}
+void Huffman::printCodeMap() {
+	std::map<char, std::vector<bool> >::iterator it = Huffman::code_map.begin();
+	std::cout<<"================================"<<std::endl;
+	std::cout<<"Huffman coding"<<std::endl;
+	while (it != Huffman::code_map.end()) {
+		vector<bool> vec;
+		vec = it->second;
+		for (unsigned int i = 0; i < vec.size(); ++i) {
+			std::cout << vec[i];
+		}
+		std::cout<<" ";
+		it++;
 	}
 }
 

@@ -21,13 +21,15 @@ private:
 	 */
 	//static std::priority_queue<Node*> leftQueue;
 	static std::map<char, int> occurences_map;
+	static std::map<char, std::vector<bool> > code_map;
 	static int length;
+	static std::vector<bool> word_code;
+
 	/*
 	 * Priority queues for another implementation with two priority quueues
 	 */
 	//static std::priority_queue<Node*, std::vector<Node*>, Node::CompareNodes> leftQueue;
 	//static std::priority_queue<Node*, std::vector<Node*>, Node::CompareNodes> rightQueue;
-
 public:
 	static std::list<Node*> tree;
 
@@ -39,7 +41,9 @@ public:
 	static void writeToFile(const char*);
 	static void count(std::string&);
 	static void ini();
-	static void printTree(Node*,int);
+	static void printTree(Node*, int);
+	static void build(Node*);
+	static void printCodeMap();
 	bool operator()(const int& l, const int& r);
 
 };
