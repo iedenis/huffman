@@ -19,9 +19,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 	const char* in_file = argv[1];
-	string out_file=argv[2];
-
-	Huffman h;
+	const char* out_file = argv[2];
 
 	if (argc != 3) {
 		cerr << argv[0] << ": requires <exe file> <input file> <output file>"
@@ -30,11 +28,14 @@ int main(int argc, char **argv) {
 	}
 	Huffman::readFile(in_file);
 	cout << "read successfully" << endl;
-				std::map<char, int>::iterator it = Huffman::accurences.begin();
-				while (it != Huffman::accurences.end()){
-					std::cout << it->first << " " << it->second<<endl;
-					it++;
-				}
+	Huffman::ini();
+	while ((Huffman::rightQueue.size()!=1 && Huffman::leftQueue.size()!= 0)
+			|| (Huffman::leftQueue.size() != 1
+					&& Huffman::rightQueue.size() != 0)) {
+		Huffman::makeNodeFromMin();
+	}
+	Node* root = Huffman::tree.front();
+	Huffman::printTree(root,0);
 	return 0;
 
 }
