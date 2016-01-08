@@ -63,9 +63,8 @@ void Huffman::readFile(const char* file_name) {
 
 void Huffman::ini() {
 	std::list<Node*>::const_iterator iter;
-
 	std::map<char, int>::iterator it = Huffman::occurences_map.begin();
-	//it=Huffman::occurences_map.rbegin();
+
 	while (it != Huffman::occurences_map.end()) {
 		Node* temp = new Node(it->first, it->second);
 		tree.push_back(temp);
@@ -118,6 +117,7 @@ Node* Huffman::makeNodeFromMin() {
 		secondMin = leftQueue.front();
 		leftQueue.pop();
 		parent = new Node(firstMin, secondMin);
+		rightQueue.push(parent);
 		tree.push_back(parent);
 		return parent;
 	} else if (leftQueue.empty()) {
@@ -168,8 +168,8 @@ Node* Huffman::makeNodeFromMin() {
 			if (leftQueue.size() == 1)
 				return NULL;
 			else {
-				firstMin = leftQueue.front();
-				leftQueue.pop();
+				//firstMin = leftQueue.front();
+				//leftQueue.pop();
 				secondMin = leftQueue.front();
 				leftQueue.pop();
 				parent = new Node(firstMin, secondMin);

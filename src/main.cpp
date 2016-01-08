@@ -29,19 +29,28 @@ int main(int argc, char **argv) {
 	Huffman::readFile(in_file);
 	cout << "***read successfully*****" << endl;
 	Huffman::ini();
-	while ((Huffman::rightQueue.size() != 1 && Huffman::leftQueue.size() != 0)
-			|| (Huffman::leftQueue.size() != 1
-					&& Huffman::rightQueue.size() != 0)) {
+	while ((Huffman::rightQueue.size() != 1 || Huffman::leftQueue.size() != 0)
+			&& ((Huffman::leftQueue.size() != 1
+					|| Huffman::rightQueue.size() != 0))
+			&& (!(Huffman::rightQueue.size() == 0
+					&& Huffman::leftQueue.size() == 0))) {
 		Huffman::makeNodeFromMin();
 	}
 	Node* root = Huffman::tree.back();
-	std::cout<<"\nThis is the tree rotated by 90 degrees to the left side"<<std::endl;
+	std::cout << "\nThis is the tree rotated by 90 degrees to the left side"
+			<< std::endl;
 	Huffman::printTree(root, 0);
 	Huffman::build(root);
 	Huffman::printCodeMap();
 
 	//TODO
-	std::cout<<" Percent: "<<(Huffman::length/Huffman::compLength)*100;
+
+	std::cout << "\nThe source text is " << Huffman::length * 8
+			<< " bits. (8 bits per symbol in ASCII" << std::endl;
+	std::cout << "The compressed text by Huffman algorithm takes "
+			<< Huffman::compLength << " bits" << std::endl;
+	std::cout << " Percent: "
+			<< ((Huffman::compLength / Huffman::length * 8)) * 100;
 	return 0;
 
 }
