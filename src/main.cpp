@@ -39,6 +39,9 @@ int main(int argc, char **argv) {
 	Huffman::printTree(root, 0);
 	Huffman::build(root);
 	Huffman::printCodeMap();
+
+	//TODO
+	std::cout<<" Percent: "<<(Huffman::length/Huffman::compLength)*100;
 	return 0;
 
 }

@@ -12,6 +12,7 @@ std::queue<Node*> Huffman::rightQueue;
 std::list<Node*> Huffman::tree;
 std::map<char, std::vector<bool> > Huffman::code_map;
 std::vector<bool> Huffman::word_code;
+double Huffman::compLength = 0.0;
 /*
  * queues for implementing with two priority queues
  */
@@ -139,6 +140,9 @@ Node* Huffman::makeNodeFromMin() {
 		}
 
 		if (!leftQueue.empty() && !rightQueue.empty()) {
+			leftTemp = leftQueue.front();
+			rightTemp = rightQueue.front();
+
 			if (leftTemp->getOccurences() < rightTemp->getOccurences()) {
 				leftTemp = leftQueue.front();
 				secondMin = leftTemp;
@@ -207,21 +211,22 @@ void Huffman::build(Node* root) {
 		build(root->getRightSon());
 	}
 	if (root->getCharacter() != '\0') {
-		code_map[(char)root->getCharacter()] = word_code;
+		code_map[(char) root->getCharacter()] = word_code;
 	}
 	word_code.pop_back();
 }
 void Huffman::printCodeMap() {
 	std::map<char, std::vector<bool> >::iterator it = Huffman::code_map.begin();
-	std::cout<<"================================"<<std::endl;
-	std::cout<<"Huffman coding"<<std::endl;
+	std::cout << "================================" << std::endl;
+	std::cout << "Huffman coding" << std::endl;
 	while (it != Huffman::code_map.end()) {
 		vector<bool> vec;
 		vec = it->second;
 		for (unsigned int i = 0; i < vec.size(); ++i) {
 			std::cout << vec[i];
+			compLength++;
 		}
-		std::cout<<" ";
+		std::cout << " ";
 		it++;
 	}
 }
