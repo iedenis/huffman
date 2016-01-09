@@ -22,6 +22,12 @@ Node::Node(Node *left, Node *right) {
 	_occurences = left->_occurences + right->_occurences;
 }
 
+void Node:: setLeftSon(Node* left){
+	_leftSon=left;
+}
+void Node::setRightSon(Node* right){
+	_rightSon=right;
+}
 Node* Node::getLeftson(){
 	return _leftSon;
 }
@@ -34,13 +40,13 @@ char Node::getCharacter(){
 int Node::getOccurences(){
 	return _occurences;
 }
-bool Node::operator <(Node* other){
+/*bool Node::operator <(Node* other){
 	//TODO
 	if(this->_occurences==other->_occurences){
 		return this->_character<other->_character;
 	}
 	return this->_occurences<other->_occurences;
-}
+}*/
 
 
 

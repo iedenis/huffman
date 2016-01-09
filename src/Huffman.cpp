@@ -13,16 +13,10 @@ std::list<Node*> Huffman::tree;
 std::map<char, std::vector<bool> > Huffman::code_map;
 std::vector<bool> Huffman::word_code;
 double Huffman::compLength = 0.0;
-/*
- * queues for implementing with two priority queues
- */
-//std::priority_queue<Node*,std::vector<Node*>,Node::CompareNodes> Huffman::leftQueue;
-//std::priority_queue<Node*,std::vector<Node*>,Node::CompareNodes> Huffman::rightQueue;
 std::map<char, int> Huffman::occurences_map;
+ofstream Huffman::wFile;
 
-void Huffman::writeToFile(const char* out_file) {
-	ofstream wFile;
-
+void Huffman::initialize(const char* out_file) {
 	try {
 		wFile.open(out_file, ios::out);
 	}
@@ -31,9 +25,8 @@ void Huffman::writeToFile(const char* out_file) {
 		cout << e.what() << endl;
 		throw;
 	}
-
-	wFile.close();
 }
+
 void Huffman::readFile(const char* file_name) {
 	char ch;
 	ifstream rFile;
@@ -42,14 +35,13 @@ void Huffman::readFile(const char* file_name) {
 	try {
 		rFile.open(file_name, iostream::in);
 		if (rFile.is_open() && !rFile.eof()) {
-			cout << "file opened" << endl;
 
 			while (rFile.get(ch)) {
 				occurences_map[ch]++;
 				length++;
 			}
-
 		}
+
 	} catch (ifstream::failure & e) {
 		if (!rFile.eof()) {  // either badbit or failbit are set
 			cout << e.what() << endl;
@@ -78,12 +70,13 @@ void Huffman::ini() {
 		++iter;
 		tree.remove(temp);
 	}
-	Node* tempFirst = leftQueue.front();
-	leftQueue.pop();
-	Node* tempSecond = new Node(tempFirst, leftQueue.front());
-	leftQueue.pop();
-	rightQueue.push(tempSecond);
-
+	/*Node* tempFirst = leftQueue.front();
+	 leftQueue.pop();
+	 Node* tempSecond = new Node(tempFirst, leftQueue.front());
+	 tree.push_back(tempSecond);
+	 leftQueue.pop();
+	 rightQueue.push(tempSecond);
+	 */
 	/*	while (!leftQueue.empty()) {
 	 Node* temp = leftQueue.front();
 	 std::cout << temp->getOccurences() << " ";
@@ -99,6 +92,7 @@ Node* Huffman::makeNodeFromMin() {
 	Node* firstMin = NULL;
 	Node* secondMin = NULL;
 	Node* parent = NULL;
+
 	if (rightQueue.empty() && leftQueue.empty())
 		return NULL;
 	if (rightQueue.size() == 1 && leftQueue.size() == 1) {
@@ -126,6 +120,7 @@ Node* Huffman::makeNodeFromMin() {
 		secondMin = rightQueue.front();
 		rightQueue.pop();
 		parent = new Node(firstMin, secondMin);
+		rightQueue.push(parent);
 		tree.push_back(parent);
 		return parent;
 	} else {
@@ -182,9 +177,6 @@ Node* Huffman::makeNodeFromMin() {
 		tree.push_back(parent);
 		return parent;
 	}
-
-	//Node* min=(leftTemp->_occurences<rightTemp->_occurences)?leftTemp:rightTemp;
-
 }
 
 void Huffman::printTree(Node* root, int k = 0) {
@@ -201,6 +193,7 @@ void Huffman::printTree(Node* root, int k = 0) {
 		Huffman::printTree(root->getRightSon(), k + 3);
 	}
 }
+
 void Huffman::build(Node* root) {
 	if (root->getLeftson() != NULL) {
 		word_code.push_back(0);
@@ -217,17 +210,49 @@ void Huffman::build(Node* root) {
 }
 void Huffman::printCodeMap() {
 	std::map<char, std::vector<bool> >::iterator it = Huffman::code_map.begin();
-	std::cout << "================================" << std::endl;
-	std::cout << "Huffman coding" << std::endl;
+	wFile << "======================================================================" << std::endl;
+	wFile << "coded words by Huffman algorithm" << std::endl;
 	while (it != Huffman::code_map.end()) {
 		vector<bool> vec;
 		vec = it->second;
+		compLength += (vec.size() * (occurences_map[it->first]));
+		wFile << it->first << "-->";
+
 		for (unsigned int i = 0; i < vec.size(); ++i) {
-			std::cout << vec[i];
-			compLength++;
+			wFile << vec[i];
 		}
-		std::cout << " ";
+		wFile << std::endl;
 		it++;
+	}
+	wFile << "======================================================================" << std::endl;
+}
+void Huffman::huffmanCoding(const char* file_name) {
+	wFile << "\n****Huffman coding*****" << std::endl;
+	char ch;
+	ifstream rFile;
+	string line;
+	rFile.exceptions(ifstream::failbit | ifstream::badbit);
+	try {
+		rFile.open(file_name, iostream::in);
+		if (rFile.is_open() && !rFile.eof()) {
+			while (rFile.get(ch)) {
+				printCode(code_map[ch]);
+				wFile << " ";
+			}
+			wFile<<"======================================================"<<std::endl;
+		}
+	} catch (ifstream::failure & e) {
+		if (!rFile.eof()) {  // either badbit or failbit are set
+			cout << e.what() << endl;
+			throw;
+		}
+	}
+	rFile.close();
+	return;
+}
+void Huffman::printCode(std::vector<bool> vec) {
+	for (unsigned int i = 0; i < vec.size(); ++i) {
+		wFile << vec[i];
 	}
 }
 

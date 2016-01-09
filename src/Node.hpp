@@ -22,15 +22,20 @@ public:
 	Node* getRightSon();
 	int getOccurences();
 	char getCharacter();
+	void setLeftSon(Node*);
+	void setRightSon(Node*);
 
 	class CompareNodes
 	{
 	public:
 		bool operator()(Node* n1, Node* n2){
+			if(n1->_occurences==n2->_occurences){
+					return n1->_character<n2->_character;
+				}
 			return n1->_occurences<n2->_occurences;
 		}
 	};
-	bool operator<(Node* other);
+	//bool operator<(Node* other);
 
 	virtual ~Node();
 };

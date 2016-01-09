@@ -14,6 +14,8 @@
 #include <queue>
 #include "Node.hpp"
 #include <list>
+#include <fstream>
+
 class Huffman {
 private:
 	/*static std::priority_queue<double, std::vector<double>, std::greater<double> >
@@ -31,7 +33,7 @@ private:
 public:
 	static double compLength;
 	static int length;
-
+	static std::ofstream wFile;
 	static std::vector<bool> word_code;
 
 	static std::list<Node*> tree;
@@ -41,12 +43,14 @@ public:
 
 	static Node* makeNodeFromMin();
 	static void readFile(const char*);
-	static void writeToFile(const char*);
+	static void initialize(const char*);
 	static void count(std::string&);
 	static void ini();
 	static void printTree(Node*, int);
 	static void build(Node*);
 	static void printCodeMap();
+	static void huffmanCoding(const char*);
+	static void printCode(std::vector<bool>);
 	bool operator()(const int& l, const int& r);
 
 };
