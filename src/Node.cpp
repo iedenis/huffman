@@ -1,10 +1,3 @@
-/*
- * Node.cpp
- *
- *  Created on: Jan 3, 2016
- *      Author: fox
- */
-
 #include "Node.hpp"
 
 Node::Node(char letter, int occurences) {

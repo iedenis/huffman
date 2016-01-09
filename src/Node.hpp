@@ -1,10 +1,3 @@
-/*
- * Node.h
- *
- *  Created on: Jan 3, 2016
- *      Author: fox
- */
-
 #ifndef NODE_HPP_
 #define NODE_HPP_
 #include <iostream>

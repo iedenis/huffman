@@ -1,15 +1,6 @@
-/*
- * main.cpp
- *
- *  Created on: Dec 29, 2015
- *      Author: fox
- */
-
 //============================================================================
-// Name        : huffman.cpp
-// Author      :
-// Version     :
-// Description :
+// Name        : Huffman algorithm implemented by two queues
+// Author      : Denis Ievlev & Lior Shmuel
 //============================================================================
 #include <iostream>
 #include <fstream>

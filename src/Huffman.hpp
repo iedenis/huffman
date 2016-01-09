@@ -1,10 +1,3 @@
-/*
- * Huffman.hpp
- *
- *  Created on: Dec 29, 2015
- *      Author: fox
- */
-
 #ifndef HUFFMAN_HPP_
 #define HUFFMAN_HPP_
 
@@ -18,18 +11,9 @@
 
 class Huffman {
 private:
-	/*static std::priority_queue<double, std::vector<double>, std::greater<double> >
-	 q1, q2;
-	 */
-	//static std::priority_queue<Node*> leftQueue;
 	static std::map<char, int> occurences_map;
 	static std::map<char, std::vector<bool> > code_map;
 
-	/*
-	 * Priority queues for another implementation with two priority quueues
-	 */
-	//static std::priority_queue<Node*, std::vector<Node*>, Node::CompareNodes> leftQueue;
-	//static std::priority_queue<Node*, std::vector<Node*>, Node::CompareNodes> rightQueue;
 public:
 	static double compLength;
 	static int length;
